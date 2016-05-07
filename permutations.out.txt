@@ -1,0 +1,9 @@
+~ Fri 06 17:57$ gcc -g perm.c
+~ Fri 06 17:57$ ./a.out
+ABC
+ACB
+BAC
+BCA
+CBA
+CAB
+~
