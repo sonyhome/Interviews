@@ -16,13 +16,12 @@
 
 #include <stdio.h>
 
-#define A3_IS_A2 (p3 >= s1)
-const int s1 = 6;
 int a1[] = {1, 5, 9, 10, 15, 20};
-const int s2 = 4;
+const int s1 = sizeof(a1)/sizeof(int);
 int a2[] = {2, 3, 8, 13};
+const int s2 = sizeof(a2)/sizeof(int);
 
-///
+/// Debug output
 printOut()
 {
 	for (int i = 0; i < s1; i++)
@@ -37,9 +36,9 @@ printOut()
 storeInto(int t,int * a2, int p2, int s2)
 {
     // Find the next value > t.
-    // This can be a dichotomic search followed by a memmove.
-    int i;
-    for(i = p2+1; i < s2; i++)
+    // This can be a dichotomic search followed by a memmove
+    // or replaced by qsort().
+    for(int i = p2+1; i < s2; i++)
     {
         if (a2[i] >= t)
         {
@@ -54,6 +53,7 @@ storeInto(int t,int * a2, int p2, int s2)
     a2[s2-1] = t;
 }
 
+
 ///
 int main() {
     // Start with a1[] as target array
@@ -62,45 +62,24 @@ int main() {
 	//code
 	int t = -1;
 	int p1 = 0;
-	int p2 = 0;
-	for (int p3 = 0; p3 < s1+s2; p3++)
+	for (int p1 = 0; p1 < s1; p1++)
 	{
-	    // Set a2[] as target array
-	    if A3_IS_A2
-	    {
-	        a3 = a2 - s1;
-	    }
-	    
-	    // Backup value replaced
-	    t = a3[p3];
-	    
-        if ((p2 >= s2 || a1[p1] <= a2[p2]) && (p1 < s1))
+        if (a1[p1] <= a2[0])
         {
-            // Value from a1 is the smallest,
-            // so it's already in a3 because a1==a3 if that's true.
-            printf("Xp1=%d p2=%d\t", p1, p2); printOut();
-            p1++;
+            // Current value in a1 is the smallest
+            printf("Xp1=%d\t", p1); printOut();
         }
-        else if (p2 < s2)
+        else
         {
-            if (! A3_IS_A2)
-            {
-                // Value from a2 is smallest, and is copied to a3==a1
-                a3[p3] = a2[p2];
-                // t must be saved to a2, but requires a sort
-                storeInto(t, a2, p2, s2);
-                printf("Yp1=%d p2=%d\t", p1, p2); printOut();
-                p1++;
-            }
-            else
-            {
-                // Value from a2 is smallest, but a3 == a2
-                printf("!p1=%d p2=%d\t", p1, p2); printOut();
-                p2++;
-                return;
-            }
+    	    // Backup value replaced
+            t = a1[p1];
+            // Value from a2 is smallest
+            a1[p1] = a2[0];
+            // t is saved to a2, but requires a sort
+            storeInto(t, a2, 0, s2);
+            printf("Yp1=%d\t", p1); printOut();
         }
 	}
-    printOut();
+    	printOut();
 	return 0;
 }
